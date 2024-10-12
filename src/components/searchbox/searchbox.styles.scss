@@ -1,0 +1,25 @@
+.searchContainer{
+    width: 50rem;
+    height: 5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    label{
+        margin-bottom: 10px;
+
+    }
+    input{
+        width: 50%;
+        height: 50px;
+        padding: 5px;
+        border-radius: 10px;
+        border: 0px;
+        box-shadow: 0px 0px 10px 2px gray;
+        font-size: medium;
+    }
+    input:focus {
+        outline: none; /* Remove the default browser outline */
+        border: 2px solid lightgray; 
+    }
+}
