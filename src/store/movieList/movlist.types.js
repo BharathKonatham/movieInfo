@@ -1,0 +1,4 @@
+export const MOVIE_LIST_ACTIONS = {
+    SET_MOVIE_LIST : 'SET_MOVIE_LIST'
+}
+
