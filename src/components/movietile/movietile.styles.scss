@@ -1,0 +1,6 @@
+.movieTileContainer{
+  display: grid;
+  grid-template-columns:repeat(4, 1fr); /* Responsive columns */
+  gap: 20px;
+  text-align: center;
+}
