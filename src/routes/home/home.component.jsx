@@ -6,23 +6,26 @@ import { useNavigate } from 'react-router-dom'
 import { fetchMoviesTen } from '../../utils/fetchData';
 import { useDispatch } from 'react-redux';
 import { setMovlieList } from '../../store/movieList/movlieList.actions';
-
+import { persistor } from '../../store/store';
 const Home = () => {
 
   const [movieName,setMovieName] = useState('')
   const navigate = useNavigate()
   const dispatch = useDispatch()
-
+  // Clear persisted state
+  persistor.purge().then(() => {
+    console.log('Persisted state cleared');
+  });
   const handleKeyEnter = async (event)=>{
     
     if(event.key === 'Enter'){
       console.log('enter key')
-      dispatch(setMovlieList([],null))
+      dispatch(setMovlieList([],null,0))
       const {Search,totalResults,Response} = await fetchMoviesTen(movieName)
-      // const data = await fetchMoviesTen(movieName)
-      console.log(Search,totalResults,Response)
+      // const data = await fetchMoviesTen(movieName) 
+      //console.log(Search,totalResults,Response)
       if(Response === 'True'){
-        //dispatch(setMovlieList(Search,totalResults))
+        dispatch(setMovlieList(Search,totalResults,1))
         navigate('./searchresults',{state:{movieName}})//}
       }  
     }
