@@ -1,0 +1,23 @@
+.ratingContainer{
+    width:600px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 2px gray;
+    background: linear-gradient(to right,white,gray);
+    .rating{
+        text-align: center;
+        margin: 0px auto;
+        padding: 5px;
+        h3{
+            color: rgb(27, 98, 96);
+        }
+        p{
+            font-size:medium;
+        }
+        
+    }
+}

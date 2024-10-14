@@ -13,7 +13,7 @@ const persistConfig = {
 
     key:'root', // persist the data from root level 
     storage:storage, //storage uses local memorey 
-    blacklist: ['movielist'] //don't persist reducers mention in this array
+    //blacklist: ['movielist'] //don't persist reducers mention in this array
 }
 
 const persistedReducer = persistReducer(persistConfig,rootReducer)

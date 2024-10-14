@@ -3,34 +3,37 @@ import SearchBox from '../../components/searchbox/searchbox.component';
 import './searchResults.styles.scss'
 import MovieTile from '../../components/movietile/movietile.component';
 import { useSelector } from 'react-redux';
-import { selectMovieList,selectTotalResult } from '../../store/movieList/movlieList.selectors';
+import { selectMovieList,selectTotalResult,selectPageNo } from '../../store/movieList/movlieList.selectors';
 import { useEffect, useState } from 'react';
 import { fetchMoviesTen } from '../../utils/fetchData';
 import { setMovlieList } from '../../store/movieList/movlieList.actions';
 import { useDispatch } from 'react-redux';
+import { throttle } from 'lodash';
 
 const SearchResults = () => {
+  const dispatch = useDispatch()
   const location = useLocation();
   const {movieName} = location.state;
   const [remainingResults,setRemainingResults] = useState(0)
   const [movieNameResultaPage,setMovieName] = useState('')
-  const [page,setPage] = useState(1)
   const mov = useSelector(selectMovieList)
+  const pageNo = useSelector(selectPageNo)
   const totalResults = useSelector(selectTotalResult)
-  const dispatch = useDispatch()
-
-  useEffect(()=>{
-    const currentItemsCount = mov.length
-    setRemainingResults(totalResults-currentItemsCount)
-  },[mov])
+  const [page,setPage] = useState(1) 
+  //console.log(pageNo)
+  // useEffect(()=>{
+  //   const currentItemsCount = mov.length
+  //   setRemainingResults(totalResults-currentItemsCount)
+  // },[mov])
 
   const fetchData = async () => {
-
+    
     try {
+      
       const {Search,totalResults,Response} = await fetchMoviesTen(movieName,page);
  
       if(Response === 'True'){
-        dispatch(setMovlieList([...mov,...Search],totalResults))
+        dispatch(setMovlieList([...mov,...Search],totalResults,page))
       }
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -40,19 +43,23 @@ const SearchResults = () => {
   };
 
   useEffect(() => {
-    fetchData();
+      console.log(page)
+      if(page>1) fetchData()
+
   }, [page]);
 
   // Scroll Event Listener
-  const handleScroll = () => {
+  const handleScroll = throttle(() => {
     const scrollHeight = document.documentElement.scrollHeight;
     const scrollTop = document.documentElement.scrollTop;
     const clientHeight = window.innerHeight;
-
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-        setPage((prevPage) => prevPage + 1); // Load more data when near the bottom
+    console.log('scoll fired')
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+        setPage((prevPage) => prevPage + 1);
+        // Load more data when near the bottom
       }
-    };
+      
+    },1000);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -66,12 +73,13 @@ const SearchResults = () => {
     
     if(event.key === 'Enter'){
       console.log('enter key')
-      dispatch(setMovlieList([],null))
+      dispatch(setMovlieList([],null,0))
       const {Search,totalResults,Response} = await fetchMoviesTen(movieNameResultaPage)
       // const data = await fetchMoviesTen(movieName)
       console.log(Search,totalResults,Response)
+      //const noPages = Math.ceil((totalResults/10))
       if(Response === 'True'){
-        dispatch(setMovlieList(Search,totalResults))
+        dispatch(setMovlieList(Search,totalResults,1))
       }  
     }
       

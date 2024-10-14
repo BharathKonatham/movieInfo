@@ -1,9 +1,10 @@
 .resultsContainer{
     width: 90%;
-    height: 100vh;
+    height: auto;
     display: flex;
     flex-direction: column;
     align-items: center;
-    
+    background: linear-gradient(to right,white,gray);
     margin: 10px auto;
+    border-radius: 20px;
 }
